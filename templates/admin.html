@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Admin – ThreadCo{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <h1 class="page-title">Admin Panel</h1>
+
+  <!-- Add Product Form -->
+  <div class="admin-form-card">
+    <h2>Add New Product</h2>
+    <form action="{{ url_for('admin_add') }}" method="POST" class="checkout-form">
+      <label>Name        <input type="text"   name="name"        required/></label>
+      <label>Price ($)   <input type="number" name="price"       step="0.01" required/></label>
+      <label>Category
+        <select name="category">
+          <option>Men</option><option>Women</option>
+          <option>Kids</option><option>Accessories</option>
+        </select>
+      </label>
+      <label>Image URL   <input type="url"    name="image_url"   placeholder="https://..."/></label>
+      <label>Description <textarea name="description" rows="2"></textarea></label>
+      <button class="btn-primary" type="submit">Add Product</button>
+    </form>
+  </div>
+
+  <!-- Product List -->
+  <table class="cart-table" style="margin-top:2rem;">
+    <thead>
+      <tr><th>ID</th><th>Name</th><th>Price</th><th>Category</th><th>Action</th></tr>
+    </thead>
+    <tbody>
+      {% for p in products %}
+      <tr>
+        <td>{{ p.id }}</td>
+        <td>{{ p.name }}</td>
+        <td>${{ "%.2f"|format(p.price) }}</td>
+        <td>{{ p.category }}</td>
+        <td><a class="remove-btn" href="{{ url_for('admin_delete', product_id=p.id) }}"
+               onclick="return confirm('Delete this product?')">Delete</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

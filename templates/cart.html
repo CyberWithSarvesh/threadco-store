@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Your Cart – ThreadCo{% endblock %}
+
+{% block content %}
+<div class="page-wrapper">
+  <h1 class="page-title">Your Cart</h1>
+
+  {% if cart %}
+  <table class="cart-table">
+    <thead>
+      <tr><th>Item</th><th>Price</th><th>Qty</th><th>Subtotal</th><th></th></tr>
+    </thead>
+    <tbody>
+      {% for key, item in cart.items() %}
+      <tr>
+        <td class="cart-item-name">
+          <img src="{{ item.image }}" alt="{{ item.name }}" class="cart-thumb"/>
+          {{ item.name }}
+        </td>
+        <td>${{ "%.2f"|format(item.price) }}</td>
+        <td>{{ item.qty }}</td>
+        <td>${{ "%.2f"|format(item.price * item.qty) }}</td>
+        <td><a class="remove-btn" href="{{ url_for('remove_from_cart', key=key) }}">✕</a></td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+
+  <div class="cart-footer">
+    <p class="cart-total">Total: <strong>${{ total }}</strong></p>
+    <div class="cart-actions">
+      <a href="{{ url_for('clear_cart') }}" class="btn-secondary">Clear Cart</a>
+      <a href="{{ url_for('checkout') }}"   class="btn-primary">Checkout →</a>
+    </div>
+  </div>
+
+  {% else %}
+    <p class="empty-msg">Your cart is empty. <a href="{{ url_for('index') }}">Keep shopping →</a></p>
+  {% endif %}
+</div>
+{% endblock %}

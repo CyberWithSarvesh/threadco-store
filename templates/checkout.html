@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% block title %}Checkout – ThreadCo{% endblock %}
+
+{% block content %}
+<div class="page-wrapper checkout-grid">
+
+  <!-- Order Summary -->
+  <div class="order-summary">
+    <h2>Order Summary</h2>
+    {% for key, item in cart.items() %}
+    <div class="summary-row">
+      <span>{{ item.name }} × {{ item.qty }}</span>
+      <span>${{ "%.2f"|format(item.price * item.qty) }}</span>
+    </div>
+    {% endfor %}
+    <hr/>
+    <div class="summary-row total-row">
+      <strong>Total</strong>
+      <strong>${{ total }}</strong>
+    </div>
+  </div>
+
+  <!-- Checkout Form -->
+  <div class="checkout-form-wrap">
+    <h2>Shipping Details</h2>
+    <form action="{{ url_for('checkout') }}" method="POST" class="checkout-form">
+      <label>Full Name
+        <input type="text" name="name" required placeholder="Jane Doe"/>
+      </label>
+      <label>Email
+        <input type="email" name="email" required placeholder="jane@email.com"/>
+      </label>
+      <label>Shipping Address
+        <textarea name="address" rows="3" required placeholder="123 Main St, New Haven, CT..."></textarea>
+      </label>
+      <button class="btn-primary full-width" type="submit">Place Order</button>
+    </form>
+  </div>
+
+</div>
+{% endblock %}

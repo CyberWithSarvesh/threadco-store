@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% block title %}ThreadCo – {% if active_category %}{{ active_category }}{% else %}All Products{% endif %}{% endblock %}
+
+{% block content %}
+
+<section class="hero">
+  <div class="hero-text">
+    <h1>Style <em>Redefined</em></h1>
+    <p>Curated clothing &amp; apparel for every occasion.</p>
+    <a class="btn-primary" href="#products">Shop Now</a>
+  </div>
+</section>
+
+<!-- Category Tabs -->
+<div class="category-tabs" id="products">
+  <a href="{{ url_for('index') }}"              class="tab {% if not active_category %}active{% endif %}">All</a>
+  <a href="{{ url_for('category', category='Men') }}"          class="tab {% if active_category=='Men' %}active{% endif %}">Men</a>
+  <a href="{{ url_for('category', category='Women') }}"        class="tab {% if active_category=='Women' %}active{% endif %}">Women</a>
+  <a href="{{ url_for('category', category='Kids') }}"         class="tab {% if active_category=='Kids' %}active{% endif %}">Kids</a>
+  <a href="{{ url_for('category', category='Accessories') }}"  class="tab {% if active_category=='Accessories' %}active{% endif %}">Accessories</a>
+</div>
+
+<!-- Product Grid -->
+<div class="product-grid">
+  {% if products %}
+    {% for p in products %}
+    <div class="card">
+      <a href="{{ url_for('product_detail', product_id=p.id) }}">
+        <div class="card-img-wrap">
+          <img src="{{ p.image_url }}" alt="{{ p.name }}" loading="lazy"/>
+          <span class="category-badge">{{ p.category }}</span>
+        </div>
+        <div class="card-info">
+          <h3>{{ p.name }}</h3>
+          <p class="price">${{ "%.2f"|format(p.price) }}</p>
+        </div>
+      </a>
+      <form action="{{ url_for('add_to_cart', product_id=p.id) }}" method="POST">
+        <button class="btn-cart" type="submit">Add to Cart</button>
+      </form>
+    </div>
+    {% endfor %}
+  {% else %}
+    <p class="empty-msg">No products found in this category.</p>
+  {% endif %}
+</div>
+
+{% endblock %}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>{% block title %}ThreadCo{% endblock %}</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}"/>
+</head>
+<body>
+
+<!-- ── NAVBAR ── -->
+<nav class="navbar">
+  <a class="brand" href="{{ url_for('index') }}">Thread<span>Co</span></a>
+
+  <div class="nav-links">
+    <a href="{{ url_for('category', category='Men') }}">Men</a>
+    <a href="{{ url_for('category', category='Women') }}">Women</a>
+    <a href="{{ url_for('category', category='Kids') }}">Kids</a>
+    <a href="{{ url_for('category', category='Accessories') }}">Accessories</a>
+  </div>
+
+  <a class="cart-icon" href="{{ url_for('cart') }}">
+    🛒
+    {% set cart = session.get('cart', {}) %}
+    {% if cart %}
+      <span class="badge">{{ cart.values() | sum(attribute='qty') }}</span>
+    {% endif %}
+  </a>
+</nav>
+
+<!-- ── FLASH MESSAGES ── -->
+{% with messages = get_flashed_messages(with_categories=true) %}
+  {% if messages %}
+    <div class="flash-container">
+      {% for cat, msg in messages %}
+        <div class="flash {{ cat }}">{{ msg }}</div>
+      {% endfor %}
+    </div>
+  {% endif %}
+{% endwith %}
+
+<!-- ── PAGE CONTENT ── -->
+<main>
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  <p>© 2026 ThreadCo &nbsp;|&nbsp; CSCI 6651 Flask Project</p>
+</footer>
+
+</body>
+</html>
